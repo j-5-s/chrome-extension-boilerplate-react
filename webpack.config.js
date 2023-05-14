@@ -64,11 +64,10 @@ var options = {
         use: [
           {
             loader: 'style-loader',
-            
           },
           {
             loader: 'css-loader',
-            options: { importLoaders: 1 }
+            options: { importLoaders: 1 },
           },
           'postcss-loader', // postcss loader needed for tailwindcss
         ],
