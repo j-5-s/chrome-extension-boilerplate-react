@@ -5,10 +5,9 @@ import {Provider} from 'react-redux';
 import Popup from './Popup';
 import './index.css';
 
-const store = createWebExtStore();
 
 // wait for the store to connect to the background page
-store.ready().then(() => {
+createWebExtStore().then((store) => {
 
   const container = document.getElementById('app-container');
   const root = createRoot(container); // createRoot(container!) if you use TypeScript

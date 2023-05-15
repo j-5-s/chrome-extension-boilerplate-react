@@ -8,16 +8,18 @@ export function Counter() {
   const dispatch = useDispatch()
 
   return (
-    <div>
-      <div>
+    <div className="flex justify-center">
+      <div className="flex items-center">
         <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           aria-label="Increment value"
           onClick={() => dispatch(increment())}
         >
           Increment
         </button>
-        <span>{count}</span>
+        <span className="px-4">{count}</span>
         <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           aria-label="Decrement value"
           onClick={() => dispatch(decrement())}
         >

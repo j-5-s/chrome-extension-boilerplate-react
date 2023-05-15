@@ -6,10 +6,12 @@ interface Props {
 }
 
 const Newtab: React.FC<Props> = ({ title }: Props) => {
-  return <div className="text-center">
+  return (
+  <div className="text-center">
     hello world
-    <Counter />  
-  </div>;
+    <Counter />   
+    </div>
+  );
 };
 
 export default Newtab;
