@@ -1,11 +1,8 @@
 import React from 'react'
-import type { RootState } from '../../common/store'
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '../../common/store/reducers/counterSlice';
-
+import { usePersistedState } from '../../common/msg/usePersistedState';
 export function Counter() {
-  const count = useSelector((state: RootState) => state.counter.value)
-  const dispatch = useDispatch()
+
+  const { value, actions } = usePersistedState<number>('counter', 0);
 
   return (
     <div className="flex justify-center">
@@ -13,15 +10,19 @@ export function Counter() {
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          onClick={() => {
+            actions.setState(value + 1);
+          }}
         >
           Increment
         </button>
-        <span className="px-4">{count}</span>
+        <span className="px-4">{value}</span>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
+          onClick={() => {
+            actions.setState(value - 1);
+          }}
         >
           Decrement
         </button>

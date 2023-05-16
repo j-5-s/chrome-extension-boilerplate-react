@@ -1,35 +1,58 @@
-import { wrapStore } from 'webext-redux';
+const ports = new Map();
 
-import { setupStore } from '../../common/store';
-import throttle from 'lodash/throttle';
-import omit from 'lodash/omit';
-
-chrome.storage.local.get(['state'], ({ state }) => {
-  const store = setupStore(state);
-  wrapStore(store);
-
-  /**
-   * Save the current store state to local storage
-   */
-  const saveState = () => {
-    if (!store) {
-      return;
-    }
-
-    console.info('Saving state to chrome.storage.local');
-
-    const state = store.getState();
-
-    chrome.storage.local.set({
-      // remove bookmark folders from taking up unnecessary space
-      state: omit(state, 'entities'),
-    });
-  };
-
-  // On new state, persist to local storage
-  const throttledSave = throttle(saveState, 10000, {
-    trailing: true,
-    leading: true,
+const publish = (msg) => {
+  ports.forEach((port) => {
+    port.postMessage(msg);
   });
-  store.subscribe(throttledSave);
+};
+
+chrome.runtime.onConnect.addListener(function (port) {
+  // console.assert(port.name === PORT_NAME);
+  console.log('port', port);
+  ports.set(port.name, port);
+  port.onDisconnect.addListener(function (port) {
+    ports.delete(port.name);
+  });
+  port.onMessage.addListener(function (msg) {
+    if (msg.type === 'initialState') {
+      chrome.storage.local.get(['state'], ({ state }) => {
+        publish({
+          type: msg.type,
+          value: state?.[msg.key] || msg.value,
+          key: msg.key,
+          ack: true,
+        });
+      });
+    }
+    if (msg.type === 'setState') {
+      chrome.storage.local.get(['state'], ({ state }) => {
+        chrome.storage.local.set({
+          // remove bookmark folders from taking up unnecessary space
+          state: {
+            ...state,
+            [msg.key]: msg.value,
+          },
+        });
+
+        publish({
+          type: msg.type,
+          value: msg.value,
+          key: msg.key,
+          ack: true,
+        });
+      });
+    }
+  });
+
+  // if (request.type === 'initialState') {
+  //   chrome.storage.local.get(['state'], ({ state }) => {
+  //     console.log('state', state);
+  //     sendResponse({
+  //       value: state?.[request.key] || request.value,
+  //       key: request.key,
+  //       ack: true,
+  //     });
+  //   });
+  // }
+  // return true;
 });

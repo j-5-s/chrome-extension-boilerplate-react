@@ -1,20 +1,19 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { createWebExtStore } from '../../common/store/webext-store'
-import {Provider} from 'react-redux';
+import { MsgProvider } from '../../common/msg/MsgProvider';
 import Popup from './Popup';
 import './index.css';
+import { getConnection } from '../../common/msg/MsgProvider';
 
-
+const connection = getConnection('popup');
 // wait for the store to connect to the background page
-createWebExtStore().then((store) => {
+document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.getElementById('app-container');
   const root = createRoot(container); // createRoot(container!) if you use TypeScript
   root.render(
-    <Provider store={store}>
+    <MsgProvider connection={connection}>
       <Popup />
-    </Provider>
+    </MsgProvider>
   );
-
 });
