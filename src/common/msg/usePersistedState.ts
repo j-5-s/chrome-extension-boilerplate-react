@@ -7,7 +7,7 @@ export function usePersistedState<T>(key: string, initialValue?: T) {
     loading: true,
     key,
     initialValue,
-    value: null,
+    value: initialValue,
   });
   const msgContext = useContext(MsgContext);
 
@@ -35,8 +35,8 @@ export function usePersistedState<T>(key: string, initialValue?: T) {
   }
 
   useEffect(() => {
-    msgContext.connection.postMessage({ type: 'initialState', key });
-  },[key, msgContext.connection]);
+    msgContext.connection.postMessage({ type: 'initialState', key, initialValue });
+  },[key, msgContext.connection, initialValue]);
 
   return {
     actions,

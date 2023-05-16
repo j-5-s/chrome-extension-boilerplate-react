@@ -1,1 +1,0 @@
-export const PORT_NAME = 'J5S';

@@ -6,8 +6,10 @@ type IMessageProvider = {
   connection: chrome.runtime.Port;
   children: React.ReactNode;
 }
-export const getConnection = (portName: string): chrome.runtime.Port => {
-  const connection = chrome.runtime.connect({ name: portName });
+export const getConnection = (portName: string, tabId: number): chrome.runtime.Port => {
+  
+  const connection = chrome.runtime.connect({ name: `${portName}`});
+  // connection.postMessage({ type: 'tabInit', tabId });
 
   return connection;
 }
