@@ -1,3 +1,9 @@
 {
-  "editor.formatOnSave": true
+  "cSpell.words": ["konsole", "Mantine", "Newtab"],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": true,
+  "jest.jestCommandLine": "yarn test"
 }
