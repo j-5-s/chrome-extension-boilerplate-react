@@ -1,4 +1,4 @@
-export type Message = {
+export type IMessage = {
   type: string;
   value: any;
   key: string;

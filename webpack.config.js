@@ -215,7 +215,6 @@ var options = {
     level: 'info',
   },
 };
-
 if (env.NODE_ENV === 'development') {
   options.devtool = 'cheap-module-source-map';
 } else {
